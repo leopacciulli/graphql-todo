@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Mutation } from 'react-apollo';
-
-import { addTodo, getTodos } from '../../utils/queries';
+import { Mutation, MutationFunction } from 'react-apollo';
+import { addTodoService } from '../../services/addTodo';
+import { addTodo } from '../../utils/queries';
 
 import {
   Container,
@@ -16,16 +16,16 @@ export const AddTodo = () => {
     setTextValue(e.target.value);
   }
 
-  const handleSubmit = (todo: any) => {
+  const handleSubmit = (todo: MutationFunction) => {
     if (textValue) {
       setTextValue('');
-      todo({ variables: { text: textValue, user: 'Leonardo Pacciulli' }, refetchQueries: [{ query: getTodos }] });
+      addTodoService(todo, textValue, 'Leonardo Pacciulli');
     }
   }
 
   return ( 
     <Mutation mutation={addTodo}>
-       {(insert_todos: any, { data }: any) => (
+       {(insert_todos: MutationFunction, { data }: any) => (
          <form onSubmit={e => {
            e.preventDefault();
             handleSubmit(insert_todos);

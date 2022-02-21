@@ -1,5 +1,6 @@
-import { Mutation } from 'react-apollo';
-import { markTodo, getTodos } from '../../utils/queries';
+import { Mutation, MutationFunction } from 'react-apollo';
+import { checkTodoService } from '../../services/checkTodo';
+import { markTodo } from '../../utils/queries';
 import { Done, AlreadyDone } from './styles';
 
 interface MarkDoneProps {
@@ -13,17 +14,13 @@ export const MarkDone = ({
 }: MarkDoneProps) => {
   return (
     <Mutation mutation={markTodo}>
-      {(update_todo: any, { data }: any) => {
+      {(check_todo: MutationFunction, { data }: any) => {
         if (done) {
           return <AlreadyDone> Already done </AlreadyDone>
         }
 
         return (
-          <Done
-            onClick={(e) => {
-              update_todo({ variables: { id }, refetchQueries: [{ query: getTodos }] })}
-            }
-          >
+          <Done onClick={(e) => { checkTodoService(check_todo, id) }}>
             Check
           </Done>
         )
